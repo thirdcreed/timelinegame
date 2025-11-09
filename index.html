@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Geography Game</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #000000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: -0.02em;
+        }
+
+        #game-container {
+            width: 100%;
+            height: 100vh;
+            background: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 4px solid #000000;
+        }
+
+        #header {
+            background: #000000;
+            color: #ffffff;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 120px 1fr 100px 140px;
+            gap: 0;
+            border-bottom: 4px solid #000000;
+        }
+
+        #round-info {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 24px 20px;
+            border-right: 2px solid #333333;
+            display: flex;
+            align-items: center;
+        }
+
+        #event-text {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-align: left;
+            padding: 24px 32px;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        #timer {
+            font-size: 48px;
+            font-weight: 700;
+            padding: 24px 20px;
+            text-align: center;
+            border-left: 2px solid #333333;
+            border-right: 2px solid #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.05em;
+        }
+
+        #score {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #map {
+            flex: 1;
+            position: relative;
+            background: #f5f5f5;
+            border-top: 2px solid #000000;
+        }
+
+        #timeline-container {
+            height: 0;
+            overflow: hidden;
+            background: #ffffff;
+            padding: 0;
+            transition: height 0.2s ease;
+            border-top: 4px solid #000000;
+        }
+
+        #timeline-container.active {
+            height: 200px;
+            padding: 32px 40px;
+        }
+
+        #timeline-label {
+            text-align: left;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            color: #000000;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        #year-display {
+            font-size: 48px;
+            color: #ff0000;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #timeline-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #timeline {
+            width: 100%;
+            height: 4px;
+            margin: 20px 0 8px 0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #000000;
+            border-radius: 0;
+            outline: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        #timeline::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            cursor: pointer;
+            border-radius: 0;
+            border: none;
+        }
+
+        #timeline::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            cursor: pointer;
+            border-radius: 0;
+            border: none;
+        }
+
+        #timeline-ticks {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            margin-top: 8px;
+        }
+
+        .tick {
+            position: absolute;
+            transform: translateX(-50%);
+        }
+
+        .tick::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: -38px;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 8px;
+            background: #000000;
+        }
+
+        .tick span {
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            color: #666666;
+            white-space: nowrap;
+            display: block;
+            text-align: center;
+        }
+
+        #submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        #submit-btn:hover {
+            background: #cc0000;
+        }
+
+        #submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .marker-pulse {
+            animation: pulse 1s ease-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        #results-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            padding: 0;
+            border: 4px solid #000000;
+            z-index: 1000;
+            display: none;
+            width: 500px;
+        }
+
+        #results-overlay.active {
+            display: block;
+        }
+
+        #results-overlay h2 {
+            background: #000000;
+            color: #ffffff;
+            padding: 24px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .results-content {
+            padding: 32px;
+        }
+
+        .result-item {
+            margin: 0 0 24px 0;
+            font-size: 16px;
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 20px;
+            align-items: baseline;
+        }
+
+        .result-item:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #000000;
+        }
+
+        .result-value {
+            color: #000000;
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .result-value.highlight {
+            color: #ff0000;
+            font-size: 32px;
+        }
+
+        #next-btn {
+            margin-top: 32px;
+            width: 100%;
+            padding: 16px;
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        #next-btn:hover {
+            background: #cc0000;
+        }
+
+        #category-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffffff;
+            z-index: 3000;
+            padding: 60px 80px;
+            overflow-y: auto;
+        }
+
+        #category-screen.hidden {
+            display: none;
+        }
+
+        #category-header {
+            margin-bottom: 60px;
+        }
+
+        #category-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            color: #000000;
+            margin-bottom: 16px;
+            line-height: 0.9;
+        }
+
+        #category-header p {
+            font-size: 18px;
+            color: #666666;
+            letter-spacing: 0;
+            max-width: 600px;
+        }
+
+        #category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+        }
+
+        .category-card {
+            border: 3px solid #000000;
+            padding: 32px;
+            cursor: pointer;
+            transition: background 0.15s;
+            position: relative;
+        }
+
+        .category-card:hover {
+            background: #f5f5f5;
+        }
+
+        .category-card.selected {
+            background: #000000;
+        }
+
+        .category-card.selected h3,
+        .category-card.selected p,
+        .category-card.selected .category-meta {
+            color: #ffffff;
+        }
+
+        .category-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: #000000;
+            margin-bottom: 12px;
+        }
+
+        .category-card p {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .category-meta {
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #999999;
+        }
+
+        .category-card.selected .category-meta {
+            color: #cccccc;
+        }
+
+        #category-continue {
+            margin-top: 40px;
+            padding: 20px 48px;
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        #category-continue:hover {
+            background: #cc0000;
+        }
+
+        #category-continue:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000000;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            z-index: 2000;
+        }
+
+        #start-screen.hidden {
+            display: none;
+        }
+
+        .start-left {
+            background: #ff0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .start-right {
+            background: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 60px 80px;
+        }
+
+        .start-content h1 {
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: #000000;
+            margin: 0;
+        }
+
+        .start-right h2 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 40px;
+            line-height: 1.1;
+        }
+
+        .start-right p {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: #ffffff;
+            margin-bottom: 20px;
+            max-width: 400px;
+            letter-spacing: 0;
+        }
+
+        #start-btn {
+            margin-top: 40px;
+            padding: 20px 48px;
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        #start-btn:hover {
+            background: #cc0000;
+        }
+
+        #lobby-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffffff;
+            z-index: 2500;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #lobby-screen.hidden {
+            display: none;
+        }
+
+        #lobby-header {
+            margin-bottom: 40px;
+        }
+
+        #lobby-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+
+        #lobby-category-name {
+            font-size: 18px;
+            color: #666666;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        #lobby-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        #lobby-players {
+            border: 3px solid #000000;
+            padding: 32px;
+        }
+
+        #lobby-players h2 {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #000000;
+            margin-bottom: 24px;
+        }
+
+        .player-item {
+            padding: 16px 0;
+            border-bottom: 1px solid #cccccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-item:last-child {
+            border-bottom: none;
+        }
+
+        .player-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .player-score {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff0000;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #lobby-status {
+            border: 3px solid #000000;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #lobby-status-text {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: #000000;
+            margin-bottom: 16px;
+        }
+
+        #lobby-status-detail {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        #waiting-animation {
+            margin-top: 40px;
+            font-size: 48px;
+            color: #ff0000;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        #lobby-leave-btn {
+            margin-top: 40px;
+            padding: 16px 40px;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        #lobby-leave-btn:hover {
+            background: #333333;
+        }
+
+        /* Win/Lose screen styles */
+        #game-over-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000000;
+            z-index: 6000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        #game-over-screen.active {
+            display: flex;
+        }
+
+        #game-over-screen.win {
+            background: #000000;
+        }
+
+        #game-over-screen.lose {
+            background: #1a1a1a;
+        }
+
+        #game-over-title {
+            font-size: 96px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        #game-over-screen.win #game-over-title {
+            color: #ff0000;
+        }
+
+        #game-over-screen.lose #game-over-title {
+            color: #666666;
+        }
+
+        #game-over-scores {
+            font-size: 32px;
+            margin-bottom: 60px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        #game-over-return-btn {
+            padding: 20px 60px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        #game-over-return-btn:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="category-screen">
+            <div id="category-header">
+                <h1>Select<br>Category</h1>
+                <p>Choose a historical theme to begin your game</p>
+            </div>
+            <div id="category-grid"></div>
+            <button id="category-continue" disabled>Continue</button>
+        </div>
+
+        <div id="lobby-screen" class="hidden">
+            <div id="lobby-header">
+                <h1>Lobby</h1>
+                <div id="lobby-category-name"></div>
+            </div>
+            <div id="lobby-content">
+                <div id="lobby-players">
+                    <h2>Players</h2>
+                    <div id="lobby-player-list"></div>
+                </div>
+                <div id="lobby-status">
+                    <div id="lobby-status-text">Waiting for Players</div>
+                    <div id="lobby-status-detail">Match starts when 2 players join</div>
+                    <div id="waiting-animation">●</div>
+                    <button id="lobby-leave-btn">Leave Lobby</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="start-screen" class="hidden">
+            <div class="start-left">
+                <div class="start-content">
+                    <h1>Timeline<br>Geography</h1>
+                </div>
+            </div>
+            <div class="start-right">
+                <h2 id="category-title">Historical<br>Precision</h2>
+                <p id="category-desc">Identify the location and date of historical events across 10 challenging rounds.</p>
+                <p>Select the geographic coordinates on the map. Adjust the timeline to specify the year.</p>
+                <button id="start-btn">Begin</button>
+            </div>
+        </div>
+
+        <div id="header">
+            <div id="round-info">Round: <span id="current-round">0</span>/10</div>
+            <div id="event-text">Click Start to Begin</div>
+            <div id="timer">30</div>
+            <div id="score">Score: <span id="current-score">0</span></div>
+        </div>
+
+        <div id="map"></div>
+
+        <div id="timeline-container">
+            <div id="timeline-label">
+                When did this happen? <span id="year-display">1500</span>
+            </div>
+            <div id="timeline-wrapper">
+                <input type="range" id="timeline" min="-3000" max="2024" value="1500" step="1">
+                <div id="timeline-ticks">
+                    <div class="tick" style="left: 0%"><span>3000 BCE</span></div>
+                    <div class="tick" style="left: 20%"><span>1000 BCE</span></div>
+                    <div class="tick" style="left: 40%"><span>1 CE</span></div>
+                    <div class="tick" style="left: 60%"><span>1000</span></div>
+                    <div class="tick" style="left: 80%"><span>2000</span></div>
+                    <div class="tick" style="left: 100%"><span>2024</span></div>
+                </div>
+            </div>
+            <button id="submit-btn" disabled>Submit Answer</button>
+        </div>
+
+        <div id="results-overlay">
+            <h2>Round Results</h2>
+            <div class="results-content">
+                <div class="result-item">
+                    <span class="result-label">Location Error</span>
+                    <span class="result-value" id="distance-error">0 km</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Time Error</span>
+                    <span class="result-value" id="time-error">0 years</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Round Score</span>
+                    <span class="result-value highlight" id="round-score">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Correct Answer</span>
+                    <span class="result-value" id="correct-answer"></span>
+                </div>
+                <button id="next-btn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over-screen">
+        <div id="game-over-title"></div>
+        <div id="game-over-scores"></div>
+        <button id="game-over-return-btn">Return to Lobby</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="game.js"></script>
+    <script src="multiplayer.js"></script>
+</body>
+</html>
