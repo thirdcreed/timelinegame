@@ -1,5 +1,76 @@
 // Category definitions with events, map bounds, and timeline ranges
 const categories = {
+    sistersHistory: {
+        name: "World History Survey",
+        description: "Ancient civilizations to modern era - from class curriculum",
+        mapCenter: [30, 20],
+        mapZoom: 2,
+        timelineMin: -3200,
+        timelineMax: 2025,
+        events: [
+            // Ancient
+            { name: "Menes Unites Upper and Lower Egypt", lat: 29.8500, lng: 31.2500, year: -3000, location: "Memphis, Egypt" },
+            { name: "Sargon of Akkad Founds the First Empire", lat: 33.1000, lng: 44.1000, year: -2270, location: "Akkad, Mesopotamia" },
+            { name: "Hammurabi Establishes His Law Code", lat: 32.5421, lng: 44.4210, year: -1792, location: "Babylon, Mesopotamia" },
+            { name: "City of Rome Founded", lat: 41.9028, lng: 12.4964, year: -753, location: "Rome, Italy" },
+            { name: "Battle of Salamis Bay", lat: 37.9667, lng: 23.5000, year: -480, location: "Salamis, Greece" },
+            { name: "Alexander the Great Becomes King", lat: 40.7617, lng: 22.3933, year: -336, location: "Pella, Macedonia" },
+            { name: "Julius Caesar Assassinated", lat: 41.8925, lng: 12.4769, year: -44, location: "Rome, Italy" },
+
+            // Classical / Late Antiquity
+            { name: "Crucifixion of Jesus Christ", lat: 31.7784, lng: 35.2296, year: 30, location: "Jerusalem" },
+            { name: "Romans Destroy Jerusalem", lat: 31.7784, lng: 35.2296, year: 70, location: "Jerusalem" },
+            { name: "Council of Nicaea", lat: 40.4292, lng: 29.7211, year: 325, location: "Nicaea, Turkey" },
+            { name: "Fall of the Western Roman Empire", lat: 44.4183, lng: 12.2035, year: 476, location: "Ravenna, Italy" },
+            { name: "Hegira - Muhammad Flees to Medina", lat: 24.4672, lng: 39.6024, year: 622, location: "Medina, Arabia" },
+            { name: "Battle of Tours - Charles Martel Stops Muslim Advance", lat: 47.3900, lng: 0.6833, year: 732, location: "Tours, France" },
+            { name: "Charlemagne Crowned Emperor", lat: 41.9022, lng: 12.4539, year: 800, location: "Rome, Italy" },
+
+            // Medieval
+            { name: "Norman Conquest - Battle of Hastings", lat: 50.9115, lng: 0.4914, year: 1066, location: "Hastings, England" },
+            { name: "First Crusade Launched", lat: 45.7797, lng: 3.0863, year: 1096, location: "Clermont, France" },
+            { name: "Temujin Named Genghis Khan", lat: 46.8625, lng: 103.8467, year: 1206, location: "Karakorum, Mongolia" },
+            { name: "Magna Carta Signed", lat: 51.4365, lng: -0.5616, year: 1215, location: "Runnymede, England" },
+            { name: "Mansa Musa Arrives in Cairo", lat: 30.0444, lng: 31.2357, year: 1324, location: "Cairo, Egypt" },
+            { name: "Black Death Devastates Europe", lat: 43.7696, lng: 11.2558, year: 1347, location: "Florence, Italy" },
+            { name: "Ottoman Turks Conquer Constantinople", lat: 41.0082, lng: 28.9784, year: 1453, location: "Constantinople" },
+
+            // Early Modern
+            { name: "Columbus Reaches the Americas", lat: 24.0833, lng: -74.5333, year: 1492, location: "San Salvador, Bahamas" },
+            { name: "Luther Posts the 95 Theses", lat: 51.8667, lng: 12.6500, year: 1517, location: "Wittenberg, Germany" },
+            { name: "Cortés Lands in Mexico", lat: 19.2000, lng: -96.1333, year: 1519, location: "Veracruz, Mexico" },
+            { name: "Battle of Panipat - Babur Founds Mughal Dynasty", lat: 29.3909, lng: 76.9635, year: 1526, location: "Panipat, India" },
+            { name: "Defeat of the Spanish Armada", lat: 50.3667, lng: -4.1500, year: 1588, location: "English Channel" },
+            { name: "Pilgrims Land at Plymouth", lat: 41.9584, lng: -70.6673, year: 1620, location: "Plymouth, Massachusetts" },
+            { name: "Charles I Beheaded", lat: 51.5014, lng: -0.1419, year: 1649, location: "Whitehall, London" },
+            { name: "William of Orange Lands in England", lat: 50.3965, lng: -3.5156, year: 1688, location: "Brixham, Devon" },
+
+            // 18th-19th Century
+            { name: "Declaration of Independence Signed", lat: 39.9496, lng: -75.1503, year: 1776, location: "Philadelphia, Pennsylvania" },
+            { name: "Storming of the Bastille", lat: 48.8534, lng: 2.3697, year: 1789, location: "Paris, France" },
+            { name: "Napoleon Defeated at Waterloo", lat: 50.6800, lng: 4.4114, year: 1815, location: "Waterloo, Belgium" },
+            { name: "Communist Manifesto Published", lat: 51.5074, lng: -0.1278, year: 1848, location: "London, England" },
+            { name: "Meiji Restoration - Imperial Power Restored", lat: 35.0116, lng: 135.7681, year: 1868, location: "Kyoto, Japan" },
+            { name: "Suez Canal Opens", lat: 30.7051, lng: 32.3439, year: 1869, location: "Ismailia, Egypt" },
+
+            // 20th Century
+            { name: "Archduke Franz Ferdinand Assassinated", lat: 43.8563, lng: 18.4131, year: 1914, location: "Sarajevo, Bosnia" },
+            { name: "October Revolution - Storming of Winter Palace", lat: 59.9410, lng: 30.3129, year: 1917, location: "Petrograd, Russia" },
+            { name: "Stock Market Crash Begins Great Depression", lat: 40.7069, lng: -74.0089, year: 1929, location: "Wall Street, New York" },
+            { name: "Hitler Becomes Chancellor of Germany", lat: 52.5200, lng: 13.4050, year: 1933, location: "Berlin, Germany" },
+            { name: "D-Day - Allied Invasion of Normandy", lat: 49.3700, lng: -0.8800, year: 1944, location: "Normandy, France" },
+            { name: "Atomic Bomb Dropped on Hiroshima", lat: 34.3853, lng: 132.4553, year: 1945, location: "Hiroshima, Japan" },
+            { name: "State of Israel Founded", lat: 32.0853, lng: 34.7818, year: 1948, location: "Tel Aviv, Israel" },
+            { name: "Chinese Communist Revolution Succeeds", lat: 39.9042, lng: 116.4074, year: 1949, location: "Beijing, China" },
+            { name: "Construction of the Berlin Wall Begins", lat: 52.5163, lng: 13.3777, year: 1961, location: "Berlin, Germany" },
+            { name: "Apollo 11 Launches to the Moon", lat: 28.5729, lng: -80.6490, year: 1969, location: "Cape Canaveral, Florida" },
+            { name: "Berlin Wall Falls", lat: 52.5200, lng: 13.4050, year: 1989, location: "Berlin, Germany" },
+            { name: "Soviet Flag Lowered at the Kremlin", lat: 55.7520, lng: 37.6175, year: 1991, location: "The Kremlin, Moscow" },
+            { name: "September 11 Attacks", lat: 40.7115, lng: -74.0134, year: 2001, location: "New York City" },
+            { name: "Hamas October 7 Attack on Israel", lat: 31.3774, lng: 34.3931, year: 2023, location: "Re'im, Israel" },
+            { name: "Israel Begins Genocide in Gaza", lat: 31.5000, lng: 34.4700, year: 2023, location: "Gaza" },
+        ]
+    },
     disasters: {
         name: "Famous Disasters",
         description: "Natural and man-made catastrophes throughout history",
@@ -77,7 +148,7 @@ const categories = {
             { name: "The Katyn Massacre", lat: 54.7760, lng: 31.7850, year: 1940, location: "Katyn Forest, USSR" },
             { name: "The Cuban Missile Crisis (Soviet Side)", lat: 55.7558, lng: 37.6173, year: 1962, location: "Moscow, USSR" },
             { name: "Yuri Gagarin's First Spaceflight", lat: 45.9650, lng: 63.3050, year: 1961, location: "Baikonur, Kazakhstan" },
-            { name: "The Dissolution of the USSR", lat: 55.7558, lng: 37.6173, year: 1991, location: "Moscow, Russia" }
+            { name: "Belovezh Accords Signed (Dissolving USSR)", lat: 52.5694, lng: 23.8500, year: 1991, location: "Viskuli, Belarus" }
         ]
     },
     world: {
@@ -116,6 +187,7 @@ let guessLatLng = null;
 let timerInterval = null;
 let timeLeft = 30;
 let gameStarted = false;
+let answerSubmitted = false;
 
 // Initialize the map
 function initMap() {
@@ -128,9 +200,10 @@ function initMap() {
         maxZoom: 19,
     }).addTo(map);
 
-    // Handle map clicks
+    // Handle map clicks - allow repositioning marker (but not after submitting)
     map.on('click', function(e) {
-        if (gameStarted && guessLatLng === null) {
+        // Allow clicks in regular game mode OR learning mode
+        if ((gameStarted || isLearningMode) && !answerSubmitted) {
             guessLatLng = e.latlng;
             placeUserMarker(e.latlng);
             showTimeline();
@@ -154,16 +227,55 @@ function placeUserMarker(latlng) {
     }).addTo(map);
 }
 
-// Show the timeline slider
+// Show the timeline slider and submit bar
 function showTimeline() {
     document.getElementById('timeline-container').classList.add('active');
+    document.getElementById('submit-bar').classList.add('active');
     document.getElementById('submit-btn').disabled = false;
 }
 
-// Hide the timeline slider
+// Hide the timeline slider and submit bar
 function hideTimeline() {
     document.getElementById('timeline-container').classList.remove('active');
+    document.getElementById('submit-bar').classList.remove('active');
     document.getElementById('submit-btn').disabled = true;
+}
+
+// Show timeline comparison markers (guess vs correct)
+function showTimelineComparison(guessedYear, correctYear, timeline) {
+    const min = parseInt(timeline.min);
+    const max = parseInt(timeline.max);
+    const range = max - min;
+
+    // Calculate positions as percentages
+    const guessPercent = ((guessedYear - min) / range) * 100;
+    const correctPercent = ((correctYear - min) / range) * 100;
+
+    // Position the markers
+    const guessMarker = document.getElementById('timeline-guess-marker');
+    const correctMarker = document.getElementById('timeline-correct-marker');
+    const errorLine = document.getElementById('timeline-error-line');
+    const markersContainer = document.getElementById('timeline-markers');
+
+    guessMarker.style.left = guessPercent + '%';
+    correctMarker.style.left = correctPercent + '%';
+
+    // Position the dashed line between the two markers
+    const leftPercent = Math.min(guessPercent, correctPercent);
+    const widthPercent = Math.abs(correctPercent - guessPercent);
+    errorLine.style.left = leftPercent + '%';
+    errorLine.style.width = widthPercent + '%';
+
+    // Update year display to show both
+    document.getElementById('year-display').textContent = formatYear(guessedYear) + ' → ' + formatYear(correctYear) + ' ✓';
+
+    // Show the markers
+    markersContainer.classList.add('active');
+}
+
+// Hide timeline comparison markers
+function hideTimelineComparison() {
+    document.getElementById('timeline-markers').classList.remove('active');
 }
 
 // Calculate distance between two points (Haversine formula)
@@ -241,6 +353,10 @@ function autoSubmit() {
 // Submit the answer
 function submitAnswer() {
     clearInterval(timerInterval);
+    answerSubmitted = true;
+
+    // Hide submit bar immediately
+    document.getElementById('submit-bar').classList.remove('active');
 
     const guessedYear = parseInt(document.getElementById('timeline').value);
     const correctYear = currentEvent.year;
@@ -262,7 +378,20 @@ function submitAnswer() {
 
     totalScore += roundScore;
 
-    // Show correct location
+    // Re-place user marker to ensure it's at the right spot
+    if (userMarker) {
+        map.removeLayer(userMarker);
+    }
+    userMarker = L.marker([guessLatLng.lat, guessLatLng.lng], {
+        icon: L.divIcon({
+            className: 'user-marker',
+            html: '<div style="background: #ff0000; width: 16px; height: 16px; border: 3px solid #000000;"></div>',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
+        })
+    }).addTo(map);
+
+    // Show correct location on map
     if (correctMarker) {
         map.removeLayer(correctMarker);
     }
@@ -277,7 +406,7 @@ function submitAnswer() {
     }).addTo(map);
 
     // Draw line between guess and correct answer
-    L.polyline([guessLatLng, [currentEvent.lat, currentEvent.lng]], {
+    L.polyline([[guessLatLng.lat, guessLatLng.lng], [currentEvent.lat, currentEvent.lng]], {
         color: '#ff0000',
         weight: 2,
         opacity: 1,
@@ -290,8 +419,25 @@ function submitAnswer() {
         [currentEvent.lat, currentEvent.lng]
     ], { padding: [50, 50] });
 
-    // Show results
-    showResults(distance, yearError, roundScore, correctYear);
+    // Show correct year on timeline and lock it
+    const timeline = document.getElementById('timeline');
+    timeline.disabled = true;
+    document.getElementById('year-input').disabled = true;
+    document.querySelectorAll('.nudge-btn').forEach(btn => btn.disabled = true);
+
+    // Show timeline comparison markers
+    showTimelineComparison(guessedYear, correctYear, timeline);
+
+    // Wait 3 seconds so user can see the correct answers, then show results and enable Continue
+    setTimeout(() => {
+        showResults(distance, yearError, roundScore, correctYear);
+
+        // Only enable Continue button AFTER results popup appears
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.textContent = 'Continue';
+        submitBtn.disabled = false;
+        document.getElementById('submit-bar').classList.add('active');
+    }, 3000);
 }
 
 // Show results overlay
@@ -320,8 +466,15 @@ function startRound() {
 
     // Reset state
     guessLatLng = null;
+    answerSubmitted = false;
     hideTimeline();
     hideResults();
+    hideTimelineComparison();
+
+    // Reset timeline
+    document.getElementById('timeline').disabled = false;
+    document.getElementById('year-input').disabled = false;
+    document.querySelectorAll('.nudge-btn').forEach(btn => btn.disabled = false);
 
     // Clear markers
     if (userMarker) {
@@ -360,6 +513,7 @@ function startRound() {
     const midYear = Math.floor((category.timelineMin + category.timelineMax) / 2);
     timelineEl.value = midYear;
     document.getElementById('year-display').textContent = formatYear(midYear);
+    document.getElementById('year-input').value = midYear;
 
     // Update timeline tick marks
     updateTimelineTicks(category.timelineMin, category.timelineMax);
@@ -401,16 +555,176 @@ function formatYear(year) {
     }
 }
 
-// Update year display when timeline changes
+// Update year display when timeline changes (but not after submitting)
 document.getElementById('timeline').addEventListener('input', function(e) {
+    if (answerSubmitted) {
+        return;
+    }
     const year = parseInt(e.target.value);
+    document.getElementById('year-display').textContent = formatYear(year);
+    document.getElementById('year-input').value = year;
+});
+
+// Timeline nudge buttons
+document.querySelectorAll('.nudge-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (answerSubmitted) return;
+
+        const timeline = document.getElementById('timeline');
+        const nudge = parseInt(this.dataset.nudge);
+        const min = parseInt(timeline.min);
+        const max = parseInt(timeline.max);
+        let newValue = parseInt(timeline.value) + nudge;
+        newValue = Math.max(min, Math.min(max, newValue));
+
+        timeline.value = newValue;
+        document.getElementById('year-display').textContent = formatYear(newValue);
+        document.getElementById('year-input').value = newValue;
+    });
+});
+
+// Year input field - type a year directly
+document.getElementById('year-input').addEventListener('input', function(e) {
+    if (answerSubmitted) return;
+
+    // Allow typing negative numbers and partial input
+    let val = this.value.replace(/[^\d\-]/g, '');
+    this.value = val;
+});
+
+document.getElementById('year-input').addEventListener('change', function(e) {
+    if (answerSubmitted) return;
+
+    const timeline = document.getElementById('timeline');
+    const min = parseInt(timeline.min);
+    const max = parseInt(timeline.max);
+    let year = parseInt(this.value) || 0;
+    year = Math.max(min, Math.min(max, year));
+
+    timeline.value = year;
+    this.value = year;
     document.getElementById('year-display').textContent = formatYear(year);
 });
 
-// Auto-submit when timeline slider is released
-document.getElementById('timeline').addEventListener('change', function(e) {
-    if (gameStarted && guessLatLng !== null) {
-        if (typeof submitAnswerMultiplayer !== 'undefined' && isMultiplayer) {
+document.getElementById('year-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        this.blur();
+    }
+});
+
+// Arrow key support for timeline (when focused or when timeline container is active)
+document.addEventListener('keydown', function(e) {
+    if (answerSubmitted) return;
+    if (!document.getElementById('timeline-container').classList.contains('active')) return;
+
+    // Don't capture if user is typing in year input
+    if (document.activeElement === document.getElementById('year-input')) return;
+
+    const timeline = document.getElementById('timeline');
+    const min = parseInt(timeline.min);
+    const max = parseInt(timeline.max);
+    let currentValue = parseInt(timeline.value);
+    let nudge = 0;
+
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        nudge = e.shiftKey ? -10 : -1;
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        nudge = e.shiftKey ? 10 : 1;
+    }
+
+    if (nudge !== 0) {
+        e.preventDefault();
+        let newValue = currentValue + nudge;
+        newValue = Math.max(min, Math.min(max, newValue));
+
+        timeline.value = newValue;
+        document.getElementById('year-display').textContent = formatYear(newValue);
+        document.getElementById('year-input').value = newValue;
+    }
+});
+
+// Precision mode - hold Shift while dragging for slower movement
+(function() {
+    const timeline = document.getElementById('timeline');
+    let precisionMode = false;
+    let precisionStartValue = 0;
+    let precisionStartX = 0;
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Shift' && !precisionMode) {
+            precisionMode = true;
+            document.getElementById('timeline-container').classList.add('precision-mode');
+        }
+    });
+
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'Shift') {
+            precisionMode = false;
+            document.getElementById('timeline-container').classList.remove('precision-mode');
+        }
+    });
+
+    // Custom precision drag handling
+    let isDragging = false;
+
+    timeline.addEventListener('mousedown', function(e) {
+        if (precisionMode) {
+            isDragging = true;
+            precisionStartValue = parseInt(timeline.value);
+            precisionStartX = e.clientX;
+            e.preventDefault();
+        }
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (isDragging && precisionMode && !answerSubmitted) {
+            const min = parseInt(timeline.min);
+            const max = parseInt(timeline.max);
+            const range = max - min;
+
+            // 1 pixel = 0.5 years in precision mode (vs normal ~5-10 years)
+            const deltaX = e.clientX - precisionStartX;
+            const yearDelta = Math.round(deltaX * 0.5);
+
+            let newValue = precisionStartValue + yearDelta;
+            newValue = Math.max(min, Math.min(max, newValue));
+
+            timeline.value = newValue;
+            document.getElementById('year-display').textContent = formatYear(newValue);
+            document.getElementById('year-input').value = newValue;
+        }
+    });
+
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
+})();
+
+// No auto-submit - user must click Submit button
+
+// Submit button (becomes Continue after answering)
+document.getElementById('submit-btn').addEventListener('click', function(e) {
+    e.stopPropagation(); // Prevent click from bubbling to map
+
+    if (this.textContent === 'Continue') {
+        // Move to next round
+        hideResults();
+        document.getElementById('submit-bar').classList.remove('active');
+        this.textContent = 'Submit Answer';
+        this.disabled = true;
+        if (typeof isMultiplayer !== 'undefined' && isMultiplayer) {
+            sendToServer({ type: 'ready_next_round' });
+            showWaitingForOpponent();
+        } else {
+            startRound();
+        }
+    } else if (guessLatLng && !answerSubmitted) {
+        // Submit answer
+        if (typeof isLearningMode !== 'undefined' && isLearningMode) {
+            submitLearningAnswer();
+        } else if (typeof submitAnswerMultiplayer !== 'undefined' && isMultiplayer) {
             submitAnswerMultiplayer();
         } else {
             submitAnswer();
@@ -418,13 +732,14 @@ document.getElementById('timeline').addEventListener('change', function(e) {
     }
 });
 
-// Submit button
-document.getElementById('submit-btn').addEventListener('click', function() {
-    if (typeof submitAnswerMultiplayer !== 'undefined' && isMultiplayer) {
-        submitAnswerMultiplayer();
-    } else {
-        submitAnswer();
-    }
+// Close results overlay button
+document.getElementById('results-close').addEventListener('click', function() {
+    hideResults();
+});
+
+// Prevent submit bar clicks from propagating to map
+document.getElementById('submit-bar').addEventListener('click', function(e) {
+    e.stopPropagation();
 });
 
 // Next round button
@@ -465,7 +780,11 @@ function updateTimelineTicks(minYear, maxYear) {
 function populateCategoryGrid() {
     const grid = document.getElementById('category-grid');
 
+    // Only show these categories (comment out others for now)
+    const enabledCategories = ['sistersHistory'];
+
     for (const [key, category] of Object.entries(categories)) {
+        if (!enabledCategories.includes(key)) continue;
         const card = document.createElement('div');
         card.className = 'category-card';
         card.dataset.categoryKey = key;
@@ -492,15 +811,12 @@ function populateCategoryGrid() {
     }
 }
 
-// Category continue button
+// Category continue button - goes directly to lobby
 document.getElementById('category-continue').addEventListener('click', function() {
-    // Update start screen with category info
-    document.getElementById('category-title').textContent = selectedCategory.name;
-    document.getElementById('category-desc').textContent = selectedCategory.description;
-
-    // Hide category screen, show start screen
+    // Hide category screen and join lobby directly
     document.getElementById('category-screen').classList.add('hidden');
-    document.getElementById('start-screen').classList.remove('hidden');
+    const categoryKey = Object.keys(categories).find(key => categories[key] === selectedCategory);
+    joinLobby(categoryKey, `Player_${Math.floor(Math.random() * 1000)}`);
 });
 
 // Start game button - now joins multiplayer lobby
